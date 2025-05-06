@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block content %}
+{% include 'navbar.html' %}
+<h4>Add Product Movement</h4>
+<form method="POST" onsubmit="return validateMovementForm()">
+    <div class="mb-3">
+        <label class="form-label">From Location</label>
+        <select name="from_location" class="form-select">
+            <option value="">-- None --</option>
+            {% for l in locations %}
+            <option value="{{ l[0] }}">{{ l[0] }} - {{ l[1] }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">To Location</label>
+        <select name="to_location" class="form-select">
+            <option value="">-- None --</option>
+            {% for l in locations %}
+            <option value="{{ l[0] }}">{{ l[0] }} - {{ l[1] }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Product</label>
+        <select name="product_id" class="form-select" required>
+            {% for p in products %}
+            <option value="{{ p[0] }}">{{ p[0] }} - {{ p[1] }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Quantity</label>
+        <input type="number" name="qty" id="qty" class="form-control" required min="1">
+    </div>
+    <button type="submit" class="btn btn-primary">Add</button>
+    <a href="/movements" class="btn btn-secondary">Back</a>
+</form>
+<script>
+function validateMovementForm() {
+    const qty = document.getElementById('qty').value;
+    if (qty <= 0) {
+        alert("Quantity must be greater than 0");
+        return false;
+    }
+    return true;
+}
+</script>
+{% endblock %}

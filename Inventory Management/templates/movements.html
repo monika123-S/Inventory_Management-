@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+{% include 'navbar.html' %}
+<h4>Product Movements</h4>
+<a href="/add_movement" class="btn btn-success mb-3">Add Movement</a>
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>ID</th><th>Timestamp</th><th>From</th><th>To</th><th>Product</th><th>Quantity</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for m in movements %}
+        <tr>
+            <td>{{ m[0] }}</td><td>{{ m[1] }}</td><td>{{ m[2] }}</td><td>{{ m[3] }}</td><td>{{ m[4] }}</td><td>{{ m[5] }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
