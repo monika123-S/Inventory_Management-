@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block content %}
+{% include 'navbar.html' %}
+<h4>Inventory Report</h4>
+<table class="table table-bordered table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>Product</th>
+            <th>Warehouse</th>
+            <th>Quantity</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for row in report_data %}
+        <tr>
+            <td>{{ row[0] }}</td>  {# Product Name #}
+            <td>{{ row[1] }}</td>  {# Location Name #}
+            <td>{{ row[2] }}</td>  {# Quantity #}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

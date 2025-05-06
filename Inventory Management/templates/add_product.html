@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block content %}
+{% include 'navbar.html' %}
+<h4>Add Product</h4>
+<form method="POST" onsubmit="return validateProductForm()">
+    <div class="mb-3">
+        <label class="form-label">Product ID</label>
+        <input type="text" name="product_name" id="product_name" class="form-control" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Add</button>
+    <a href="/products" class="btn btn-secondary">Back</a>
+</form>
+<script>
+function validateProductForm() {
+    const pid = document.getElementById('product_id').value.trim();
+    if (!pid) {
+        alert("Product ID cannot be empty.");
+        return false;
+    }
+    return true;
+}
+</script>
+{% endblock %}
