@@ -89,15 +89,16 @@ def add_movement():
 def report():
     cur = mysql.connection.cursor()
     cur.execute("""
-        SELECT 
-  p.product_name,
-  l.location_name,
-  (SELECT IFNULL(SUM(qty), 0) FROM ProductMovement 
-   WHERE product_id = p.product_id AND to_location = l.location_id) -
-  (SELECT IFNULL(SUM(qty), 0) FROM ProductMovement 
-   WHERE product_id = p.product_id AND from_location = l.location_id) AS balance
-FROM Product p, Location l
-GROUP BY p.product_name, l.location_name;
+       SELECT 
+            p.product_name,
+            l.location_name,
+            SUM(IF(pm.to_location = l.location_id, pm.qty, 0)) - 
+            SUM(IF(pm.from_location = l.location_id, pm.qty, 0)) AS balance
+        FROM Product p
+        CROSS JOIN Location l
+        LEFT JOIN ProductMovement pm ON p.product_id = pm.product_id 
+            AND (pm.to_location = l.location_id OR pm.from_location = l.location_id)
+        GROUP BY p.product_name, l.location_name
     """)
     report_data = cur.fetchall()
     cur.close()
