@@ -90,16 +90,14 @@ def report():
     cur = mysql.connection.cursor()
     cur.execute("""
         SELECT 
-            p.product_name,
-            l.location_name,
-            COALESCE(SUM(CASE WHEN pm.to_location = l.location_id THEN pm.qty ELSE 0 END), 0) -
-            COALESCE(SUM(CASE WHEN pm.from_location = l.location_id THEN pm.qty ELSE 0 END), 0) AS balance
-        FROM Product p
-        CROSS JOIN Location l
-        LEFT JOIN ProductMovement pm 
-            ON p.product_id = pm.product_id 
-            AND (pm.to_location = l.location_id OR pm.from_location = l.location_id)
-        GROUP BY p.product_name, l.location_name
+  p.product_name,
+  l.location_name,
+  (SELECT IFNULL(SUM(qty), 0) FROM ProductMovement 
+   WHERE product_id = p.product_id AND to_location = l.location_id) -
+  (SELECT IFNULL(SUM(qty), 0) FROM ProductMovement 
+   WHERE product_id = p.product_id AND from_location = l.location_id) AS balance
+FROM Product p, Location l
+GROUP BY p.product_name, l.location_name;
     """)
     report_data = cur.fetchall()
     cur.close()
